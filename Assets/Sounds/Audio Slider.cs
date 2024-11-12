@@ -15,15 +15,18 @@ public class AudioSlider : MonoBehaviour
 
         float currentVolume;
 
-        if (AudioManager.instance.audioMixer.GetFloat(allVolume, out currentVolume))
+        if(volumeSlider != null) 
         {
-            volumeSlider.value = Mathf.Pow(10, currentVolume / 20);
+            if (AudioManager.instance.audioMixer.GetFloat(allVolume, out currentVolume))
+            {
+                volumeSlider.value = Mathf.Pow(10, currentVolume / 20);
+            }
+            else
+            {
+                UnityEngine.Debug.LogError($"Parameter {allVolume} not found in AudioMixer");
+            }
+            volumeSlider.onValueChanged.AddListener(SetVolumeFromSlider);
         }
-        else
-        {
-            UnityEngine.Debug.LogError($"Parameter {allVolume} not found in AudioMixer");
-        }
-        volumeSlider.onValueChanged.AddListener(SetVolumeFromSlider);
     }
 
     public void SetVolume(float volume)
